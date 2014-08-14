@@ -1,0 +1,98 @@
+   $(document).ready(function () {
+        var s_next = 0;
+
+        $(".book-pop-up").click(function () {
+            $("#myModal .modal-title").html($(this).attr("book_title"));
+            $("#myModal .author").html($(this).attr("book_author"));
+            $("#myModal .isbn").html($(this).attr("isbn"));
+            $("#myModal .publisher").html($(this).attr("publisher"));
+            $("#myModal .language").html($(this).attr("language"));
+            $("#myModal .date").html($(this).attr("published_date"));
+            $("#myModal .type").html($(this).attr("type"));
+            $("#myModal .link_id").html($(this).attr("link_id"));
+            $("#myModal .link_id").attr('href', $(this).attr("link_id"));
+            $("#myModal .book_cover").attr("src", $(this).find(".book").attr("src"));
+            $("#myModal .info").html($(this).attr("book_info"));
+            $("#myModal .info").attr('href', $(this).attr("book_info"));
+
+        });
+
+        $(window).scroll(function () {
+
+            if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+                s_next = s_next + 30;
+                $.ajax({
+                    type: "GET",
+                    url: window.location.pathname + "&start=" + s_next,
+                    dataType: "json"
+                }).done(function (data) {
+                    setTimeout(function () {
+                        next_set(data);
+                    }, 500);
+                });
+            }
+        });
+
+        function next_set(data) {
+            var next_books = "";
+            $.each(data, function (num, book) {
+                console.log(num);
+                if (num % 6 == 0) {
+                    if (num == 0) {
+                        console.log("start <div> book row");
+                        next_books += '<div class="book-row">';
+                    } else if (num == data.length - 1) {
+                        console.log("close </div> books");
+                        next_books += '</div>';
+                    } else {
+                        console.log("end </div> book row");
+                        next_books += '</div>';
+                        next_books += '<div class="book-row">';
+                    }
+                    console.log("first book in row");
+                    //FIRST BOOK ON ROW
+                    next_books += '<div class="book-slot">' +
+                        '<a class="book-pop-up" href="#myModal" link_id="' + book.link_id + '" type="' + book.type + '" published_date="' + book.published_date + '" language="' + book.language + '"  publisher="' + book.publisher + '" isbn="' + book.isbn + '" book_info="' + book.book_info + '" book_title="' + book.book_title + '"  book_author="' + book.book_author + '"  data-toggle="modal">' +
+                        '<img class="book" onerror="this.src=\'/book_covers/no_cover.jpg\'" src="/book_covers/' + book.book_id + '.jpg">' +
+                        '</a>' +
+                        '</div>';
+
+                } else {
+                    if (num == data.length - 1) {
+                        console.log("last book row");
+                        //LAST BOOK ON ROW
+                        next_books += '<div class="book-slot">' +
+                            '<a href="#myModal" link_id="' + book.link_id + '" type="' + book.type + '" published_date="' + book.published_date + '" language="' + book.language + '" publisher="' + book.publisher + '" isbn="' + book.isbn + '" book_info="' + book.book_info + '" book_title="' + book.book_title + '"  book_author="' + book.book_author + '"  data-toggle="modal">' +
+                            '<img class="book" onerror="this.src=\'/book_covers/no_cover.jpg\'" src="/book_covers/' + book.book_id + '.jpg">' +
+                            '</a>' +
+                            '</div>';
+                        next_books += '</div>';
+                    } else {
+                        //OTHER BOOK ON ROW
+                        console.log("add book");
+                        next_books += '<div class="book-slot">' +
+                            '<a class="book-pop-up" href="#myModal" link_id="' + book.link_id + '" type="' + book.type + '" published_date="' + book.published_date + '" language="' + book.language + '" publisher="' + book.publisher + '" isbn="' + book.isbn + '" book_info="' + book.book_info + '" book_title="' + book.book_title + '"  book_author="' + book.book_author + '"  data-toggle="modal">' +
+                            '<img class="book" onerror="this.src=\'/book_covers/no_cover.jpg\'" src="/book_covers/' + book.book_id + '.jpg">' +
+                            '</a>' +
+                            '</div>';
+                    }
+                }
+            });
+            $("#book-stand").append(next_books);
+            $(".book-pop-up").click(function () {
+                $("#myModal .modal-title").html($(this).attr("book_title"));
+                $("#myModal .author").html($(this).attr("book_author"));
+                $("#myModal .isbn").html($(this).attr("isbn"));
+                $("#myModal .publisher").html($(this).attr("publisher"));
+                $("#myModal .language").html($(this).attr("language"));
+                $("#myModal .type").html($(this).attr("type"));
+                $("#myModal .link_id").html($(this).attr("link_id"));
+                $("#myModal .link_id").attr('href', $(this).attr("link_id"));
+                $("#myModal .date").html($(this).attr("published_date"));
+                $("#myModal .book_cover").attr("src", $(this).find(".book").attr("src"));
+                $("#myModal .info").html($(this).attr("book_info"));
+                $("#myModal .info").attr('href', $(this).attr("book_info"));
+                $("#myModal .type").attr('href', $(this).attr("type"));
+            });
+        }
+    });
