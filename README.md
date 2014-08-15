@@ -23,7 +23,7 @@ Framework:
 Dietcake
 
 ## How to Install:
-##### 1. Download https://github.com/sarahgosago/book-management-system/archive/1.0.0.zip (book management system 1.0.0). 
+##### 1. Download https://github.com/sarahgosago/Book-Managing-by-Google-Account/archive/master.zip (book management system 1.0.0). 
 ##### 2. Create symlink to core.php at app/config from core_development.php or core_production.php depending on your environment. Edit the snippets according on how you use it like the host/url/db_dsn.
 ##### 3. Add your database (.sql files) on app/config/sql
 ##### 4. Put all book cover images on webroot/book_covers
